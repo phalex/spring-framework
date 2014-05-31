@@ -61,18 +61,29 @@ import org.springframework.web.util.WebUtils;
  * Central dispatcher for HTTP request handlers/controllers, e.g. for web UI controllers or HTTP-based remote service
  * exporters. Dispatches to registered handlers for processing a web request, providing convenient mapping and exception
  * handling facilities.
+ * 
+ * 此servlet是http请求控制器的中心分配器，例如：存在界面的web服务或者基于http请求的远程服务。分配器注册了web请求的控制器，提供方便的映射和异常控制组件。
  *
  * <p>This servlet is very flexible: It can be used with just about any workflow, with the installation of the
  * appropriate adapter classes. It offers the following functionality that distinguishes it from other request-driven
  * web MVC frameworks:
  *
+ *此servlet非常灵活：他能通过安装合适的适配器类用于任何工作流。他提供区别与其他基于请求驱动的web mvc 框架的如下功能：
+ *
  * <ul> <li>It is based around a JavaBeans configuration mechanism.
+ * 
+ * 他基于通过多个javabean配置的原理。
  *
  * <li>It can use any {@link HandlerMapping} implementation - pre-built or provided as part of an application - to
  * control the routing of requests to handler objects. Default is {@link org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping}
  * and {@link org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping}. HandlerMapping objects
  * can be defined as beans in the servlet's application context, implementing the HandlerMapping interface, overriding
  * the default HandlerMapping if present. HandlerMappings can be given any bean name (they are tested by type).
+ * 
+ * 他能使用任何实现了HandlerMapping接口的类进行预编译或者相当于提供应用的一部分功能去控制请求的路由到最终的控制器。
+ * 默认使用org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping 和 
+ * org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping。HandlerMapping 实例能够在servlet的应用上下文中以普通bean的形式进行定义，
+ * 这些bean需要实现HandlerMapping接口，如果存在这些自定义的HandlerMapping，将覆盖默认的HandlerMapping。HandlerMapping能够使用任何类名（因为他们是被通过类型来检测的）。
  *
  * <li>It can use any {@link HandlerAdapter}; this allows for using any handler interface. Default adapters are {@link
  * org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter}, {@link org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter},
@@ -80,6 +91,12 @@ import org.springframework.web.util.WebUtils;
  * interfaces, respectively. A default {@link org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter}
  * will be registered as well. HandlerAdapter objects can be added as beans in the application context, overriding the
  * default HandlerAdapters. Like HandlerMappings, HandlerAdapters can be given any bean name (they are tested by type).
+ * 
+ * 他能使用任何实现了HandlerAdapter接口的类。默认使用org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter和
+ * org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter，分别对应spring的org.springframework.web.HttpRequestHandlert和
+ * org.springframework.web.servlet.mvc.Controller接口。默认的org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter
+ * 同样将被默认注册。实现了HandlerAdapter接口的类可以在应用上下文中进行配置，用于覆盖默认的HandlerAdapter实现。和HandlerMappings一样，HandlerAdapter
+ * 可以使用任何类名（因为他们是以类型来被检测的）。
  *
  * <li>The dispatcher's exception resolution strategy can be specified via a {@link HandlerExceptionResolver}, for
  * example mapping certain exceptions to error pages. Default are
