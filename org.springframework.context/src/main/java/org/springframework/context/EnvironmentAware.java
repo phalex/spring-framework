@@ -30,6 +30,7 @@ public interface EnvironmentAware extends Aware {
 
 	/**
 	 * Set the {@code Environment} that this object runs in.
+	 * 设置环境对象，符合Aware的规范，即：有且仅有一个输入参数，返回值为空
 	 */
 	void setEnvironment(Environment environment);
 

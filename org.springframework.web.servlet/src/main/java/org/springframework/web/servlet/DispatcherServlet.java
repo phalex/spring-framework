@@ -104,28 +104,50 @@ import org.springframework.web.util.WebUtils;
  * {@link org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver}, and
  * {@link org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver}. These HandlerExceptionResolvers can be overridden
  * through the application context. HandlerExceptionResolver can be given any bean name (they are tested by type).
+ * 
+ * 此分配器的异常解决策略可以指定一个实现了HandlerExceptionResolver接口的类来控制，例如：将特定的异常信息映射到一个错误页面。默认的异常解析器有：
+ * org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver，
+ * org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver，
+ * org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver。
+ * 可以通过应用上下文配置实现了HandlerExceptionResolvers接口的类来覆盖这些默认值。实现HandlerExceptionResolvers接口的类也可以使用任意类名（因为他们是被通过类型来检测的）。
  *
  * <li>Its view resolution strategy can be specified via a {@link ViewResolver} implementation, resolving symbolic view
  * names into View objects. Default is {@link org.springframework.web.servlet.view.InternalResourceViewResolver}.
  * ViewResolver objects can be added as beans in the application context, overriding the default ViewResolver.
  * ViewResolvers can be given any bean name (they are tested by type).
- *
+ * 
+ * 此分配器的视图解决策略可以指定一个实现了ViewResolver接口的类来控制，将特定的逻辑视图名称映射成一个视图对象。默认的视图解析器有：
+ * org.springframework.web.servlet.view.InternalResourceViewResolver，可以通过应用上下文配置实现了ViewResolver接口的类来覆盖默认值，
+ * 实现ViewResolver接口的类也可以使用任意类名（因为他们是被通过类型来检测的）。
+ * 
  * <li>If a {@link View} or view name is not supplied by the user, then the configured {@link
  * RequestToViewNameTranslator} will translate the current request into a view name. The corresponding bean name is
  * "viewNameTranslator"; the default is {@link org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator}.
+ * 
+ * 如果用户配置没有提供实现了View接口的类或者视图名称，那么已经配置的实现了RequestToViewNameTranslator接口的类将转换当前请求到视图名称。
+ * 对应的类名是【viewNameTranslator】，默认为：org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator。
  *
  * <li>The dispatcher's strategy for resolving multipart requests is determined by a {@link
  * org.springframework.web.multipart.MultipartResolver} implementation. Implementations for Jakarta Commons FileUpload
  * and Jason Hunter's COS are included; the typical choise is {@link org.springframework.web.multipart.commons.CommonsMultipartResolver}.
  * The MultipartResolver bean name is "multipartResolver"; default is none.
+ * 
+ * 此分配器通过实现了org.springframework.web.multipart.MultipartResolver接口的类来解析多部分请求（用于文件上传）。
+ * 一般使用org.springframework.web.multipart.commons.CommonsMultipartResolver，MultipartResolver的名称使用【multipartResolver】，没有默认值。
  *
  * <li>Its locale resolution strategy is determined by a {@link LocaleResolver}. Out-of-the-box implementations work via
  * HTTP accept header, cookie, or session. The LocaleResolver bean name is "localeResolver"; default is {@link
  * org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver}.
+ * 
+ * 此分配器的本地化策略由接口LocaleResolver决定。此策略需要通过请求头或者cookie或者session配合。本地化解析器使用名称：【localeResolver】 ，默认值是：
+ * org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver。
  *
  * <li>Its theme resolution strategy is determined by a {@link ThemeResolver}. Implementations for a fixed theme and for
  * cookie and session storage are included. The ThemeResolver bean name is "themeResolver"; default is {@link
  * org.springframework.web.servlet.theme.FixedThemeResolver}. </ul>
+ * 
+ * 此分配器的主题解析策略由接口ThemeResolver决定。实现一个固定的主题由cookie和session存储。主题解析器的名称为【themeResolver】，默认值为：
+ * org.springframework.web.servlet.theme.FixedThemeResolver。
  *
  * <p><b>NOTE: The <code>@RequestMapping</code> annotation will only be processed if a corresponding
  * <code>HandlerMapping</code> (for type level annotations) and/or <code>HandlerAdapter</code> (for method level
@@ -133,15 +155,25 @@ import org.springframework.web.util.WebUtils;
  * <code>HandlerMappings</code> or <code>HandlerAdapters</code>, then you need to make sure that a corresponding custom
  * <code>DefaultAnnotationHandlerMapping</code> and/or <code>AnnotationMethodHandlerAdapter</code> is defined as well -
  * provided that you intend to use <code>@RequestMapping</code>.
+ * 
+ * 注意：@RequestMapping注解只有在分配器配置中存在正确的HandlerMapping（类型等级注解）和HandlerAdapter（方法等级注解）时才被执行。这种情况下将使用默认值。
+ * 否则 ，如果定义了自定义控制映射器或者控制适配器，打算使用@RequestMapping，就需要确认同时存在正确的自定义DefaultAnnotationHandlerMapping或者
+ * AnnotationMethodHandlerAdapter。
  *
  * <p><b>A web application can define any number of DispatcherServlets.</b> Each servlet will operate in its own
  * namespace, loading its own application context with mappings, handlers, etc. Only the root application context as
  * loaded by {@link org.springframework.web.context.ContextLoaderListener}, if any, will be shared.
  *
+ *一个web应用可以定义任意多个此分配器。每个分配器将在自己的命名空间中运行，加载自己应用上下文中配置的映射器、控制器，等等。只有根的应用上下文配置会被
+ *org.springframework.web.context.ContextLoaderListener加载，如果存在的话，将被共享。
+ *
  * <p>As of Spring 3.1, {@code DispatcherServlet} may now be injected with a web
  * application context, rather than creating its own internally. This is useful in Servlet
  * 3.0+ environments, which support programmatic registration of servlet instances. See
  * {@link #DispatcherServlet(WebApplicationContext)} Javadoc for details.
+ * 
+ * 从spring3.1起，DispatcherServlet可以在应用上下文中进行获取，而不是创建在自己内部。这在servlet3.0以上的环境中是有用的，他能提供程序注册servlet实例的能
+ * 详情请参照#DispatcherServlet(WebApplicationContext)的javadoc文档。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller

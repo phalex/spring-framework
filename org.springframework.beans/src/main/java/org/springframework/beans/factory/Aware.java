@@ -23,6 +23,9 @@ package org.springframework.beans.factory;
  * determined by individual subinterfaces, but should typically
  * consist of just one void-returning method that accepts a single
  * argument.
+ * 
+ * 特定父接口的标记，表明实现此接口的类是spring容器中特定的合适的对象，存在回调风格的方法。
+ * 实际的方法签名由实际的子接口决定，但是应该由一个典型的方法组成，此方法必须接收一个参数，返回void。
  *
  * <p>Note that merely implementing {@link Aware} provides no default
  * functionality. Rather, processing must be done explicitly, for example
@@ -30,6 +33,11 @@ package org.springframework.beans.factory;
  * Refer to {@link org.springframework.context.support.ApplicationContextAwareProcessor}
  * and {@link org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory}
  * for examples of processing {@code *Aware} interface callbacks.
+ * 
+ * 注意：实现此接口的类不提供默认的功能。但是，处理时必须明白，比如：
+ * 在org.springframework.beans.factory.config.BeanPostProcessor中引用org.springframework.context.support.ApplicationContextAwareProcessor
+ * 和org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory
+ * 处理*Aware接口的回调。
  *
  * @author Chris Beams
  * @since 3.1
